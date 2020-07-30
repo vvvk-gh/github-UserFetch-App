@@ -1,22 +1,25 @@
 import React from 'react'
 
 export default class Search extends React.Component{
-  //With constructor
-    constructor(props){
-        super(props)
+//   //With constructor
+//     constructor(props){
+//         super(props)
 
-        this.state = {
-         userName :'',   
-        }     
-    }
+//         this.state = {
+//          userName :'',   
+//         }     
+//     }
 
    //With out constructor and 
-//    state = {
-//        userName : "",
-//    } 
+   state = {
+       userName : "",
+   } 
    
     render(){
-        
-        return (<input value = {this.state.userName} type = "text" placeholder="Enter UserName"/>)
+        //accessing the data from a variable
+        //const name = this.state.userName
+        //accessing the data via destructuring
+        const {userName} = this.state;
+        return (<input value = {userName} type = "text" placeholder="Enter UserName"/>)
     }
 }
