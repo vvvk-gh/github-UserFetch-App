@@ -1,4 +1,3 @@
-//Approach 1 : Two way mapping 
 
 import React from 'react'
 
