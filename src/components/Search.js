@@ -1,4 +1,4 @@
-
+//Approach 1 : two way binding
 import React from 'react'
 
 export default class Search extends React.Component{
