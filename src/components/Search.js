@@ -20,10 +20,11 @@ export default class Search extends React.Component{
 
     render(){
         const {userName} = this.state;
-        //here onchange is an event
+        
         return (
         <div>
             <h1>Search Box 1 : Two Way mapping </h1>
+            {/* here onchange is an event */}
             <input value = {userName} onChange = {this.handleUserNameChange}  type = "text" placeholder="Enter UserName"/>)
         </div>
         )
