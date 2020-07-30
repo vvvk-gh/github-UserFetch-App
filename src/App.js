@@ -1,16 +1,24 @@
 import React from 'react';
 import './App.css';
-//Approach 1 : Two way binding
-// import Search from './components/Search';
-//Approach 2 : React Ref
-//import Search2 from './components/Search2'
-//Approach 3 : Accessing from event object
-import Search3 from './components/Search3'
+import Search from './components/Search'
 
-function App() {
-  return (
-    <Search3 />
-  );
+
+class App extends React.Component {
+  
+  fetchUserData(username){
+    //fetch user data  
+    alert(username);
+  }
+  
+  render(){
+
+    return (
+      //this jsx variable will be used in search.js
+      <Search fetchData = {(username) => this.fetchUserData(username)} />
+    );
+  }
+  
+  
 }
 
 export default App;
