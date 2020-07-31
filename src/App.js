@@ -11,6 +11,8 @@ class App extends React.Component {
   }
 
   async fetchUserData(username){
+    //this.setState({//can update options} , optional callback ()=>{})
+    //we are going to use that callback for loading
     this.setState({loading : true} , async ()=>{
      
       try{
@@ -50,8 +52,11 @@ class App extends React.Component {
     return (
       <div>
       <Search fetchData = {(username) => this.fetchUserData(username)} />
+      <div className="text-center pt-5">
       {error && <p className = "text-danger">{error}</p>}
       {loading && <p>Loading...</p>}
+      
+      </div>
       </div>
     )
   }
