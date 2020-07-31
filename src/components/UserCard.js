@@ -10,7 +10,18 @@ import React from 'react'
 export default class UserCard extends React.Component{
 
     render(){
-        return ("User Data" +this.props.user.public_repos)
+        const {user} = this.props;
+
+        return (
+            <div className="card">
+                <div className="card-body">
+                    <img src={user.avatar_url} alt="userProfilePic"/>
+                    <h1>{user.name}</h1>
+                    <p>{user.bio}</p>
+                    <p>{user.location}</p>
+                </div>
+            </div>
+        )
     }
 }
 
