@@ -4,45 +4,57 @@ import Search from './components/Search'
 
 
 class App extends React.Component {
-//state without constructor as constructor is not mandatory
   state =  {
-    user : null
+    user : null,
+    error : null,
+    loading : false
   }
 
   async fetchUserData(username){
-    //fetch git hub user data
-
+    this.setState({loading : true} , async ()=>{
+     
       try{
-        //fetch is method provided by browsers
-          const res = await fetch(`https://api.github.com/users/${username}`) 
-          if(res.ok){
-              const data = await res.json();
-              //console.log(data);
-              return (
-                  this.setState({
-                  user : data
-                })
-              )
-
-          }
-          else{
-              console.log(`User doesn't exist`)
-          }
-        }catch (err){
-            console.log(`${err}`)
+        const res = await fetch(`https://api.github.com/users/${username}`) 
+        if(res.ok){
+            const data = await res.json();
+            
+            return (
+                this.setState({
+                user : data,
+                error : null,
+                loading: false,
+              })
+            )
         }
-    
+
+        const error = (await res.json()).message;
+        
+        this.setState({
+          error,
+          loading : false,
+
+        });
+
+      }catch (err){
+       this.setState({
+          error:'There is some error'+err,
+          loading:false, 
+        }); 
+      }
+
+      })
   }
   
   render(){
-
+  const {error , loading} = this.state;
     return (
-      //this jsx variable will be used in search.js
+      <div>
       <Search fetchData = {(username) => this.fetchUserData(username)} />
-    );
+      {error && <p className = "text-danger">{error}</p>}
+      {loading && <p>Loading...</p>}
+      </div>
+    )
   }
-  
-  
 }
 
 export default App;
