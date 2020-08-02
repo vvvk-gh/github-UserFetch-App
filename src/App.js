@@ -89,7 +89,7 @@ class App extends React.Component {
             </div>
             {!userDataError && !loading && user && <UserCard user = {user}/>}
             {reposError && <p className = "text-danger">{reposError}</p>}
-            {!loading && !reposError && repos.map((repo , index) => <RepoCard key = {index} repo = {repo} />)}
+            {!loading && !reposError && repos.map((repo) => <RepoCard key = {repo.id} repo = {repo} />)}
           </div>
       </div>
         
