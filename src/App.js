@@ -12,7 +12,6 @@ class App extends React.Component {
     userDataError: null,
     reposError : null,
     loading : false,
-    //intialize a new variable page in the state
     page:1,
   }
 
@@ -28,13 +27,11 @@ class App extends React.Component {
 
  fetchRepos = async (username) =>{
    const {page} = this.state;
-  //make the page dyanamic 
   const res = await fetch (`https://api.github.com/users/${username}/repos?page=${page}`,
   );
       if(res.ok){
         const data = await res.json();      
        //console.log(data);
-       //update and pass the page along with the data 
         return {data , page : page+1} 
       }
 
@@ -59,7 +56,6 @@ class App extends React.Component {
          return this.setState({ 
                       user:user.data,
                       repos : repos.data,
-                      //accessing the page data
                       page : repos.page,
                       loading: false
                       });
@@ -81,7 +77,14 @@ class App extends React.Component {
       })
   }
 
-
+LoadMore =  async () =>{
+    const {data , page} = await this.fetchRepos(this.state.user.login);
+    
+    if(data){
+      this.setState((state) => ({repos : [...state.repos, ...data],page}))
+  } 
+}
+    
   
   render(){
   const {userDataError , reposError, loading , user , repos}  = this.state;
@@ -97,6 +100,7 @@ class App extends React.Component {
             {!userDataError && !loading && user && <UserCard user = {user}/>}
             {reposError && <p className = "text-danger">{reposError}</p>}
             {!loading && !reposError && repos.map((repo) => <RepoCard key = {repo.id} repo = {repo} />)}
+            <button className ="btn btn-success" onClick = {this.LoadMore}>Load More</button>
           </div>
       </div>
         

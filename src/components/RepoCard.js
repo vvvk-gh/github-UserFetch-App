@@ -9,10 +9,10 @@ export default class RepoCard extends React.Component{
                 <div className="card my-2">
                     <div className="card-body">
                         <a href={repo.html_url}>
-                            <h1>{repo.full_name}</h1>
+                            <h3>{repo.full_name}</h3>
+                        </a>
                             <p>Watchers :<strong>{repo.watchers_count}</strong></p>
                             <p>Stars : <strong>{repo.stargazers_count}</strong></p>
-                        </a>
                     </div>
             </div>
         )
