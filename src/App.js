@@ -11,7 +11,9 @@ class App extends React.Component {
     repos: [],
     userDataError: null,
     reposError : null,
-    loading : false
+    loading : false,
+    //intialize a new variable page in the state
+    page:1,
   }
 
  fetchUserData = async(username) =>{
@@ -25,12 +27,15 @@ class App extends React.Component {
  };
 
  fetchRepos = async (username) =>{
-  const res = await fetch (`https://api.github.com/users/${username}/repos?page=1`,
+   const {page} = this.state;
+  //make the page dyanamic 
+  const res = await fetch (`https://api.github.com/users/${username}/repos?page=${page}`,
   );
       if(res.ok){
         const data = await res.json();      
        //console.log(data);
-        return {data} 
+       //update and pass the page along with the data 
+        return {data , page : page+1} 
       }
 
     const error = (await res.json()).message;
@@ -54,6 +59,8 @@ class App extends React.Component {
          return this.setState({ 
                       user:user.data,
                       repos : repos.data,
+                      //accessing the page data
+                      page : repos.page,
                       loading: false
                       });
              }
