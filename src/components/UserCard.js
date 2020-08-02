@@ -15,10 +15,15 @@ export default class UserCard extends React.Component{
         return (
             <div className="card">
                 <div className="card-body">
-                    <img src={user.avatar_url} alt="userProfilePic"/>
+                <div className ="row">
+                    <img className = "col-2" src={user.avatar_url} alt="userProfilePic" width="100px" height="150px"/>
+                    <div className ="col-5">
                     <h1>{user.name}</h1>
                     <p>{user.bio}</p>
                     <p>{user.location}</p>
+                    </div>   
+                   
+                </div>
                 </div>
             </div>
         )

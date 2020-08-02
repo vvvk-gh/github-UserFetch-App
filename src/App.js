@@ -2,11 +2,15 @@ import React from 'react';
 import './App.css';
 import Search from './components/Search'
 import UserCard from './components/UserCard'
+import RepoCard from './components/RepoCard' 
 
 class App extends React.Component {
   state =  {
     user : null,
     error : null,
+    repos: [],
+    userDataError: null,
+    reposError : null,
     loading : false
   }
 
@@ -18,34 +22,46 @@ class App extends React.Component {
       }
   const error = (await res.json()).message;
     return {error};
- }
+ };
 
  fetchRepos = async (username) =>{
-  const res = await fetch (`https://api.github.com/users/${username}/repos?page=1`)
+  const res = await fetch (`https://api.github.com/users/${username}/repos?page=1`,
+  );
       if(res.ok){
         const data = await res.json();      
+       //console.log(data);
         return {data} 
       }
 
     const error = (await res.json()).message;
+    
     return {error};
 
- }
-
+ };
 
   async fetchData(username){
     this.setState({loading : true} , async ()=>{
       try{
-        const {data , error} = await this.fetchUserData(username); 
 
-        if(data){
-          this.state({  user:data,loading: false})
-        }
+        const [user , repos] = await Promise.all([
+          this.fetchUserData(username),
+          this.fetchRepos(username)
+        ]) 
 
+        if(user.data !== undefined && repos.data !== undefined){
+          //console.log(user)
+          //console.log(repos)
+         return this.setState({ 
+                      user:user.data,
+                      repos : repos.data,
+                      loading: false
+                      });
+             }
+        console.log("should print user not found on screen")
         this.setState({
-          error,
+          userDataError: user.error,
+          reposError : repos.error,
           loading : false,
-
         });
 
       }catch (err){
@@ -61,16 +77,22 @@ class App extends React.Component {
 
   
   render(){
-  const {error , loading , user} = this.state;
+  const {userDataError , reposError, loading , user , repos}  = this.state;
+
     return (
       <div>
       <Search fetchData = {(username) => this.fetchData(username)} />
-      <div className="text-center pt-5">
-      {error && <p className = "text-danger">{error}</p>}
-      {loading && <p>Loading...</p>}
-      {!error && !loading && user && <UserCard user = {user}/>}
+      <div className="container">
+          <div className="text-center pt-5">
+            {loading && <p>Loading...</p>}
+            {userDataError && <p className = "text-danger">{userDataError}</p>}
+            </div>
+            {!userDataError && !loading && user && <UserCard user = {user}/>}
+            {reposError && <p className = "text-danger">{reposError}</p>}
+            {!loading && !reposError && repos.map((repo , index) => <RepoCard key = {index} repo = {repo} />)}
+          </div>
       </div>
-      </div>
+        
     )
   }
 }
