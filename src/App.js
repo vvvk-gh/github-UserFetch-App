@@ -26,14 +26,12 @@ class App extends React.Component {
     return {error};
  };
 
- fetchRepos = async (username) =>{
-   const {page} = this.state;
+ fetchRepos = async (username , page) =>{
   const res = await fetch (`https://api.github.com/users/${username}/repos?page=${page}&per_page=${PAGE_SIZE}`,
   );
       if(res.ok){
-        const data = await res.json();      
-       //console.log(data);
-        return {data , page : page+1} 
+        const data = await res.json();     
+        return {data}
       }
 
     const error = (await res.json()).message;
@@ -48,7 +46,7 @@ class App extends React.Component {
 
         const [user , repos] = await Promise.all([
           this.fetchUserData(username),
-          this.fetchRepos(username)
+          this.fetchRepos(username , 1)
         ]) 
 
         if(user.data !== undefined && repos.data !== undefined){
@@ -57,7 +55,6 @@ class App extends React.Component {
          return this.setState({ 
                       user:user.data,
                       repos : repos.data,
-                      page : repos.page,
                       loading: false
                       });
              }
@@ -78,11 +75,11 @@ class App extends React.Component {
       })
   }
 
-LoadMore =  async () =>{
-    const {data , page} = await this.fetchRepos(this.state.user.login);
+loadPage =  async (page) =>{
+    const {data} = await this.fetchRepos(this.state.user.login , page);
     
     if(data){
-      this.setState((state) => ({repos : [...state.repos, ...data],page}))
+      this.setState((state) => ({repos :data ,page}))
   } 
 }
     
@@ -108,7 +105,10 @@ LoadMore =  async () =>{
                 <div className="my-3">
                 {[...new Array(Math.ceil(user.public_repos / PAGE_SIZE))].map(
                   (_, index) =>(
-                    <button key = {index} className="btn btn-success mr-2">
+                    <button
+                    key = {index} 
+                    className="btn btn-success mr-2" 
+                    onClick = {()=> this.loadPage(index + 1)}>
                       {index+1}
                     </button>
                   )
