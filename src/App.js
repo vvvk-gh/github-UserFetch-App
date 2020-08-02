@@ -4,6 +4,7 @@ import Search from './components/Search'
 import UserCard from './components/UserCard'
 import RepoCard from './components/RepoCard' 
 
+const PAGE_SIZE = 10; 
 class App extends React.Component {
   state =  {
     user : null,
@@ -27,7 +28,7 @@ class App extends React.Component {
 
  fetchRepos = async (username) =>{
    const {page} = this.state;
-  const res = await fetch (`https://api.github.com/users/${username}/repos?page=${page}`,
+  const res = await fetch (`https://api.github.com/users/${username}/repos?page=${page}&per_page=${PAGE_SIZE}`,
   );
       if(res.ok){
         const data = await res.json();      
