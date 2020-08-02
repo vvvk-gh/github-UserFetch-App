@@ -90,6 +90,8 @@ LoadMore =  async () =>{
   render(){
   const {userDataError , reposError, loading , user , repos, page}  = this.state;
 
+    const renderRepos = !loading && !reposError && !!repos.length
+
     return (
       <div>
       <Search fetchData = {(username) => this.fetchData(username)} />
@@ -100,16 +102,26 @@ LoadMore =  async () =>{
             </div>
             {!userDataError && !loading && user && <UserCard user = {user}/>}
             {reposError && <p className = "text-danger">{reposError}</p>}
-            {!loading && !reposError && repos.map((repo) => <RepoCard key = {repo.id} repo = {repo} />)}
-            {!loading && !userDataError && user && (page-1)*PAGE_SIZE < user.public_repos && (
-              <button className ="col-12 my-3 btn btn-success" onClick = {this.LoadMore}>Load More</button>
-
-            )}
-           
+            
+            {renderRepos && (
+              <React.Fragment>
+                <div className="my-3">
+                {[...new Array(Math.ceil(user.public_repos / PAGE_SIZE))].map(
+                  (_, index) =>(
+                    <button key = {index} className="btn btn-success mr-2">
+                      {index+1}
+                    </button>
+                  )
+                )}
+              </div>
+            
+            {repos.map(repo => <RepoCard key = {repo.id} repo = {repo} />)}
+              </React.Fragment>
+              )}           
           </div>
       </div>
         
-    )
+    );
   }
 }
 
