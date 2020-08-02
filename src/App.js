@@ -88,7 +88,7 @@ LoadMore =  async () =>{
     
   
   render(){
-  const {userDataError , reposError, loading , user , repos}  = this.state;
+  const {userDataError , reposError, loading , user , repos, page}  = this.state;
 
     return (
       <div>
@@ -101,7 +101,11 @@ LoadMore =  async () =>{
             {!userDataError && !loading && user && <UserCard user = {user}/>}
             {reposError && <p className = "text-danger">{reposError}</p>}
             {!loading && !reposError && repos.map((repo) => <RepoCard key = {repo.id} repo = {repo} />)}
-            <button className ="btn btn-success" onClick = {this.LoadMore}>Load More</button>
+            {!loading && !userDataError && user && (page-1)*PAGE_SIZE < user.public_repos && (
+              <button className ="col-12 my-3 btn btn-success" onClick = {this.LoadMore}>Load More</button>
+
+            )}
+           
           </div>
       </div>
         
